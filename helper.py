@@ -21,9 +21,7 @@ def normalize_and_convert_to_mono(audio_path):
     audio = audio.set_channels(1).set_frame_rate(16000) # mono and 16khz (speaker dientification pipeline expects 16k)
 
     # Normalizing volume
-    target_dBFS = -20.0
-    change_dBFS = target_dBFS - audio.dBFS
-    normalized = audio.apply_gain(change_dBFS)
+    normalized = audio.apply_gain(-20-audio.dbFS)
 
     temp = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     normalized.export(temp.name, format="wav")
