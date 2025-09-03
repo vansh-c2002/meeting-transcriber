@@ -75,8 +75,10 @@ uvicorn main:app --reload
 
 You can copy paste from Google Calendar.
 
-Achintya Sagar <<achintya@edpi.ai>>, Anand Singh <<anand.singh@edpi.ai>>, Armeen Mahdian <<armeen@edpi.ai>>, Koyna Kumari <<koynak@edpi.ai>>, Lovepreet Singh <<lovepreets@edpi.ai>>, Tanmay Sharma <<tanmays@edpi.ai>>
+Achintya Sagar <<achintya@edpi.ai>>, Armeen Mahdian <<armeen@edpi.ai>>, Koyna Kumari <<koynak@edpi.ai>>, Lovepreet Singh <<lovepreets@edpi.ai>>, Tanmay Sharma <<tanmays@edpi.ai>>, Vansh Chugh <<vanshc@edpi.ai>>
 
-Or comma-separate them. 
+OR
 
-The repo uses regex, so email extraction should not be an issue regardless of the format.
+<<achintya@edpi.ai>> <<armeen@edpi.ai>> <<koynak@edpi.ai>> <<lovepreets@edpi.ai>> <<tanmays@edpi.ai>> <<vanshc@edpi.ai>>
+
+Method uses regex, so emails must be within angle brackets.

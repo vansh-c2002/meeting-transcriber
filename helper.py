@@ -30,7 +30,7 @@ def normalize_and_convert_to_mono(audio_path):
     return temp.name
 
 def parse_invitees(invitees_list: str):
-    list_of_invitees = re.findall(r'<([^<>@\s]+@[^<>@\s]+\.[^<>@\s]+)>', invitees_list)
+    list_of_invitees = re.findall(r'([^<>@\s]+@[^<>@\s]+\.[^<>@\s]+)', invitees_list)
     return list_of_invitees
 
 

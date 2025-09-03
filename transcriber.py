@@ -7,9 +7,8 @@ import whisper
 # compute_type = "int8" # change to "int8" if low on GPU mem (may reduce accuracy)
 # invitees_list = 'Full name <don@gmail.com>, Other name <isaac@cursor.ai>, Some Thing <mo@yale.edu>'
 
-def transcribe_audio(audio_file, invitees_list, whisper_model = 'turbo', device='cpu', batch_size=4, compute_type='int8'):
+def transcribe_audio(audio_file, invitees, whisper_model = 'turbo', device='cpu', batch_size=4, compute_type='int8'):
 
-    invitees = parse_invitees(invitees_list)
     num_speakers = len(invitees)
 
     # Compute embeddings for all samples
@@ -28,7 +27,7 @@ def transcribe_audio(audio_file, invitees_list, whisper_model = 'turbo', device=
         embedding = get_segment_embedding(audio_file, segment['start'], segment['end'])
         segment['speaker'] = get_speaker_from_matrix(embedding, matrix, speakers)
 
-    combined_segments = combine_segments(segments) #TODO: for higher accuracy, don't run this
+    combined_segments = combine_segments(segments) #TODO: for higher efficiency, don't run this, replace combined_segments with segments lower
 
     # Creating transcript
     transcript = []
