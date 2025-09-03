@@ -34,11 +34,3 @@ async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(
         "summary": summary,
         "action_items": action_items
     }
-
-# See if you can process in parallel using encode_batch()
-
-#------------------ Resolved: -------------------------
-# For whomever does this next, use the following tools to create something state of the art (Aug 29, 2025): 
-# Streaming Sortformer Diarizer 4spk v2 for best diarization (huggingface)
-
-# Use faster-whisper instead of whisperX (TODO)
