@@ -5,17 +5,11 @@ import os
 import whisper
 import logging
 
-# device = "cpu"
-# audio_file = "/Users/vanshc/Desktop/delete.mp3"
-# batch_size = 4 # increase for higher speed
-# compute_type = "int8" # change to "int8" if low on GPU mem (may reduce accuracy)
-# invitees_list = check format in readme.md
-
 logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('whisper_model'), device='cpu', batch_size=4, compute_type='int8'):
+def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('whisper_model')):
     
     # This is not optimized for GPUs yet
 
