@@ -1,4 +1,6 @@
 from helper import get_segment_embedding, embedding_matrix, get_speaker_from_matrix, combine_segments, process_samples_folder, parse_invitees
+from dotenv import load_dotenv
+import os
 import whisper
 
 # device = "cpu"
@@ -7,7 +9,9 @@ import whisper
 # compute_type = "int8" # change to "int8" if low on GPU mem (may reduce accuracy)
 # invitees_list = 'Full name <don@gmail.com>, Other name <isaac@cursor.ai>, Some Thing <mo@yale.edu>'
 
-def transcribe_audio(audio_file, invitees, whisper_model = 'turbo', device='cpu', batch_size=4, compute_type='int8'):
+load_dotenv()
+
+def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('WHISPER_MODEL'), device='cpu', batch_size=4, compute_type='int8'):
 
     num_speakers = len(invitees)
 
