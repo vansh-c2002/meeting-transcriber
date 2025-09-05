@@ -9,11 +9,14 @@ from pathlib import Path
 import torchaudio
 import torch.nn.functional as F
 from io import BytesIO
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Load ECAPA model
 spkrec = SpeakerRecognition.from_hparams(
     source="speechbrain/spkrec-ecapa-voxceleb",
-    savedir="pretrained_models/spkrec"
+    savedir="data/pretrained_models/spkrec"
 )
 
 def normalize_and_convert_to_mono(audio_path):
@@ -28,13 +31,13 @@ def normalize_and_convert_to_mono(audio_path):
     return temp.name
 
 def parse_invitees(invitees_list: str):
-    list_of_invitees = re.findall(r'([^<>@\s]+@[^<>@\s]+\.[^<>@\s]+)', invitees_list)
+    list_of_invitees = re.findall(r'<([^<>@\s]+@[^<>@\s]+\.[^<>@\s]+)>', invitees_list)
     return list_of_invitees
 
 
 def extract_embedding(audio_path, embedding_path):
     if os.path.exists(embedding_path):
-        print(f"Skipping (exists): {embedding_path}")
+        logger.info(f"Skipping (exists): {embedding_path}")
         return
 
     temp_path = None
@@ -49,10 +52,10 @@ def extract_embedding(audio_path, embedding_path):
 
         os.makedirs(os.path.dirname(embedding_path), exist_ok=True)
         torch.save(embedding, embedding_path)
-        print(f"Saved: {embedding_path}")
+        logging.info(f"Saved: {embedding_path}")
 
     except Exception as e:
-        print(f"Error processing {audio_path}: {e}")
+        logging.exception(f"Error processing {audio_path}: {e}")
 
     finally:
         if temp_path and os.path.exists(temp_path):

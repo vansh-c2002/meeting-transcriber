@@ -5,10 +5,14 @@ from helper import parse_invitees
 from transcriber import transcribe_audio
 from summarizer import summarize
 from dotenv import load_dotenv
+import logging
 
 app = FastAPI()
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 @app.get('/')
 async def welcome():
@@ -24,10 +28,16 @@ async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(
             detail=f"Unsupported file type: {file.content_type}"
         )
     
-    # Error if unrecorded invitee
-
     invitees = parse_invitees(invitees_list)
 
+    # Error if no invitees
+    if not invitees:
+        raise HTTPException(
+            status_code=400,
+            detail = "No invitees detected."
+        )
+    
+    # Error if invitee doesn't have sample
     missing_samples = []
     for invitee in invitees:
         invitee_folder = os.path.join(os.environ.get('samples_directory'), invitee)
@@ -35,6 +45,7 @@ async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(
             missing_samples.append(invitee)
 
     if missing_samples:
+        logger.error('Invitee(s) lack sample recording(s).')
         raise HTTPException(
             status_code=400,
             detail=f"No sample recordings found for: {', '.join(missing_samples)}"
@@ -47,8 +58,22 @@ async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(
         tmp.write(contents)
         tmp_path = tmp.name  # Full path to the saved file
 
-    transcript= transcribe_audio(tmp_path, invitees) # run whisper_model = large for better transcription (note that it will take longer!)
-    summary, action_items = summarize(transcript)
+    try:
+        transcript = transcribe_audio(tmp_path, invitees)
+    except Exception as e:
+        logger.error(f'Failed to transcribe: {e}')
+        raise 
+
+    logger.info('Transcription complete! Starting summarization')
+
+    try:
+        summary, action_items = summarize(transcript)
+    except Exception as e:
+        logger.exception('Failed summarization/action item extraction')
+        raise HTTPException(
+            status_code=400,
+            detail=f"Couldn't extract summary/action items"
+        )
 
     return {
         "transcript": transcript,
