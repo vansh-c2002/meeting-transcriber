@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import tempfile
-from helper import parse_invitees
+from utils.transcription_utils import parse_invitees
 from transcriber import transcribe_audio
 from summarizer import summarize
 from dotenv import load_dotenv

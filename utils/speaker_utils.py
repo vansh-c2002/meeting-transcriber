@@ -1,15 +1,16 @@
 import os
-import re
+import torchaudio
+import tqdm
 from pydub import AudioSegment
+import torchaudio
+from io import BytesIO
 import tempfile
 import torch
-import tqdm
-from speechbrain.inference.speaker import SpeakerRecognition
-from pathlib import Path
-import torchaudio
-import torch.nn.functional as F
-from io import BytesIO
 import logging
+import torch.nn.functional as F
+from pathlib import Path
+from speechbrain.inference.speaker import SpeakerRecognition
+
 
 logger = logging.getLogger(__name__)
 
@@ -29,10 +30,6 @@ def normalize_and_convert_to_mono(audio_path):
     temp = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
     normalized.export(temp.name, format="wav")
     return temp.name
-
-def parse_invitees(invitees_list: str):
-    list_of_invitees = re.findall(r'<([^<>@\s]+@[^<>@\s]+\.[^<>@\s]+)>', invitees_list)
-    return list_of_invitees
 
 
 def extract_embedding(audio_path, embedding_path):
@@ -61,11 +58,12 @@ def extract_embedding(audio_path, embedding_path):
         if temp_path and os.path.exists(temp_path):
             os.remove(temp_path)  # Cleanup temp file
 
+
 def process_samples_folder(samples_dir, embeddings_dir):
     samples_dir = Path(samples_dir)
     embeddings_dir = Path(embeddings_dir)
 
-    for audio_file in tqdm.tqdm(samples_dir.rglob("*")):
+    for audio_file in samples_dir.rglob("*"):
         if audio_file.suffix.lower() not in ['.wav', '.flac', '.mp3', '.m4a', '.aac', '.ogg']:
             continue
 
@@ -87,6 +85,7 @@ def embedding_matrix(embedding_root, invitees):
 
     matrix = torch.stack(embeddings)
     return matrix, speakers
+
 
 def get_speaker_from_matrix(segment_embedding, embedding_matrix, speakers):
     similarity = F.cosine_similarity(segment_embedding.unsqueeze(0), embedding_matrix)
@@ -110,32 +109,3 @@ def get_segment_embedding(audio_file, segment_start, segment_end):
     signal, _ = torchaudio.load(buffer)
     embedding = spkrec.encode_batch(signal).squeeze().detach().cpu()
     return embedding
-
-def combine_segments(segments):
-    combined_segments = []
-    previous_segment = None
-
-    for segment in segments:
-        # Remove 'words' key
-        segment_data = {
-            'start': segment['start'],
-            'end': segment['end'],
-            'text': segment['text'],
-            'speaker': segment['speaker']
-        }
-        
-        if previous_segment is None:
-            previous_segment = segment_data
-        elif segment['speaker'] == previous_segment['speaker']:
-            # Same speaker: combine
-            previous_segment['text'] += segment['text']
-            previous_segment['end'] = segment['end']
-        else:
-            # Different speaker: save previous and start new
-            combined_segments.append(previous_segment)
-            previous_segment = segment_data
-
-    # Add the last one
-    if previous_segment is not None:
-        combined_segments.append(previous_segment)
-    return combined_segments

@@ -81,4 +81,8 @@ OR
 
 <<achintya@edpi.ai>> <<armeen@edpi.ai>> <<koynak@edpi.ai>> <<lovepreets@edpi.ai>> <<tanmays@edpi.ai>> <<vanshc@edpi.ai>>
 
-Method uses regex, so emails must be within angle brackets.
+OR even 
+
+achintya@edpi.ai, armeen@edpi.ai, koynak@edpi.ai, lovepreets@edpi.ai, tanmays@edpi.ai, vanshc@edpi.ai
+
+Method uses regex; looks for @ and . to parse a list of email IDs that match - person@domain.name

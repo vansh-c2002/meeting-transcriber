@@ -1,4 +1,5 @@
-from helper import get_segment_embedding, embedding_matrix, get_speaker_from_matrix, combine_segments, process_samples_folder, parse_invitees
+from utils.speaker_utils import get_segment_embedding, embedding_matrix, get_speaker_from_matrix, process_samples_folder
+from utils.transcription_utils import combine_segments 
 from dotenv import load_dotenv
 import os
 import whisper
