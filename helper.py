@@ -128,7 +128,7 @@ def combine_segments(segments):
             previous_segment = segment_data
         elif segment['speaker'] == previous_segment['speaker']:
             # Same speaker: combine
-            previous_segment['text'] += ' ' + segment['text']
+            previous_segment['text'] += segment['text']
             previous_segment['end'] = segment['end']
         else:
             # Different speaker: save previous and start new
