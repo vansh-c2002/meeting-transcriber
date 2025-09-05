@@ -7,16 +7,19 @@ import whisper
 # audio_file = "/Users/vanshc/Desktop/delete.mp3"
 # batch_size = 4 # increase for higher speed
 # compute_type = "int8" # change to "int8" if low on GPU mem (may reduce accuracy)
-# invitees_list = 'Full name <don@gmail.com>, Other name <isaac@cursor.ai>, Some Thing <mo@yale.edu>'
+# invitees_list = check format in readme.md
 
 load_dotenv()
 
-def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('WHISPER_MODEL'), device='cpu', batch_size=4, compute_type='int8'):
+def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('whisper_model'), device='cpu', batch_size=4, compute_type='int8'):
 
     num_speakers = len(invitees)
 
+    samples_directory = os.environ.get('samples_directory')
+    embeddings_directory = os.environ.get('embeddings_directory')
+
     # Compute embeddings for all samples
-    process_samples_folder('./data/samples/', './data/embeddings/')
+    process_samples_folder(samples_directory, embeddings_directory)
 
     # Use Whisper for transcription
     model = whisper.load_model(whisper_model)
@@ -24,7 +27,7 @@ def transcribe_audio(audio_file, invitees, whisper_model = os.environ.get('WHISP
 
     segments = result['segments']
 
-    matrix, speakers = embedding_matrix("./data/embeddings/", invitees)    # TODO: Have an intial matrix and speakers list on startup, and select
+    matrix, speakers = embedding_matrix(embeddings_directory, invitees)    # TODO: Have an intial matrix and speakers list on startup, and select
                                                                     # speakers from those, instead of recomputing
     # Replace speaker names
     for segment in segments:

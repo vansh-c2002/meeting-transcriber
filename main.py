@@ -4,8 +4,11 @@ import tempfile
 from helper import parse_invitees
 from transcriber import transcribe_audio
 from summarizer import summarize
+from dotenv import load_dotenv
 
 app = FastAPI()
+
+load_dotenv()
 
 @app.get('/')
 async def welcome():
@@ -27,7 +30,7 @@ async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(
 
     missing_samples = []
     for invitee in invitees:
-        invitee_folder = os.path.join("data/samples", invitee)
+        invitee_folder = os.path.join(os.environ.get('samples_directory'), invitee)
         if not os.path.isdir(invitee_folder) or not os.listdir(invitee_folder):
             missing_samples.append(invitee)
 
