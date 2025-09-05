@@ -14,14 +14,14 @@ async def welcome():
 @app.post("/process-audio")
 async def process_audio(file: UploadFile = File(...), invitees_list: str = Form(...)):
 
-    # Error if unsupported fil type
+    # Error if unsupported file type
     if file.content_type not in ["audio/mpeg", "audio/wav", "audio/x-wav"]:
         raise HTTPException(
             status_code=400,
             detail=f"Unsupported file type: {file.content_type}"
         )
     
-    # Error if unsupported invitee
+    # Error if unrecorded invitee
 
     invitees = parse_invitees(invitees_list)
 

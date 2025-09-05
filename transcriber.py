@@ -15,7 +15,7 @@ def transcribe_audio(audio_file, invitees, whisper_model = 'turbo', device='cpu'
     process_samples_folder('./data/samples/', './data/embeddings/')
 
     # Use Whisper for transcription
-    model = whisper.load_model(whisper_model) # we can also try with turbo
+    model = whisper.load_model(whisper_model)
     result = model.transcribe(audio_file, word_timestamps=True)
 
     segments = result['segments']
