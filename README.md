@@ -63,7 +63,14 @@ data/
 │   ├── jess-1.wav
 │   └── jess-2.wav
 ```
-5. **Launch the API**
+5. **Prepare .env file**
+
+```bash
+cp .env.example .env
+```
+Input your [Groq](https://console.groq.com/keys) API key in the .env file.
+
+6. **Launch the API**
 
 To start the transcription API, run:
 
@@ -71,18 +78,18 @@ To start the transcription API, run:
 uvicorn main:app --reload
 ```
 
-6. **Input the audio and list of attendees**
+7. **Input the audio and list of attendees**
 
 You can copy paste from Google Calendar.
 
-Achintya Sagar <<achintya@edpi.ai>>, Armeen Mahdian <<armeen@edpi.ai>>, Koyna Kumari <<koynak@edpi.ai>>, Lovepreet Singh <<lovepreets@edpi.ai>>, Tanmay Sharma <<tanmays@edpi.ai>>, Vansh Chugh <<vanshc@edpi.ai>>
+Maya Thompson <<mayat@spotify.com>>, Elias Navarro <<eliasn@spotify.com>>, Zoe Chen <<zoec@spotify.com>>, Leo Armstrong <<leoa@spotify.com>>, Aria Delgado <<ariad@espotify.com>>, Kai Matsuda <<kaim@espotify.com>>, Vansh Chugh <<vanshc@spotify.com>>
 
 OR
 
-<<achintya@edpi.ai>> <<armeen@edpi.ai>> <<koynak@edpi.ai>> <<lovepreets@edpi.ai>> <<tanmays@edpi.ai>> <<vanshc@edpi.ai>>
+<<mayat@spotify.com>> <<eliasn@spotify.com>> <<zoec@spotify.com>> <<leoa@spotify.com>> <<ariad@espotify.com>> <<kaim@espotify.com>> <<vanshc@spotify.com>>
 
 OR even 
 
-achintya@edpi.ai, armeen@edpi.ai, koynak@edpi.ai, lovepreets@edpi.ai, tanmays@edpi.ai, vanshc@edpi.ai
+mayat@spotify.com, eliasn@spotify.com, zoec@spotify.com, leoa@spotify.com, ariad@espotify.com, kaim@espotify.com, vanshc@spotify.com
 
-Method uses regex; looks for @ and . to parse a list of email IDs that match - person@domain.name
+Method uses regex; looks for @ and . to parse a list of email IDs that match - person@company.name
