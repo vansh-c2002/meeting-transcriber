@@ -93,3 +93,7 @@ OR even
 mayat@spotify.com, eliasn@spotify.com, zoec@spotify.com, leoa@spotify.com, ariad@espotify.com, kaim@espotify.com, vanshc@spotify.com
 
 Method uses regex; looks for @ and . to parse a list of email IDs that match - person@company.name
+
+## To-do List
+
+Replace Whisper with [`faster-whisper`](https://github.com/SYSTRAN/faster-whisper) for faster processing.
